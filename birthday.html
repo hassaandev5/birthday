@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday Sidra! 🎉</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎂</text></svg>"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #ff69b4, #9370db);
+        font-family: "Poppins", sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+      }
+
+      .header {
+        text-align: center;
+        margin: 2rem 0;
+        color: white;
+        animation: bounce 2s infinite;
+        z-index: 2;
+      }
+
+      .header h1 {
+        font-family: "Dancing Script", cursive;
+        font-size: 4rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+        padding: 2rem;
+        max-width: 1200px;
+        z-index: 2;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        padding: 1.5rem;
+        width: 300px;
+        min-height: 200px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+      }
+
+      .card:hover {
+        transform: translateY(-15px) rotate(2deg);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      }
+
+      .card-content {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #333;
+        z-index: 1;
+        position: relative;
+      }
+
+      .sender-name {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        font-weight: 600;
+        color: #9370db;
+        opacity: 0;
+        transition: all 0.5s;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        background: rgba(147, 112, 219, 0.1);
+        backdrop-filter: blur(5px);
+        transform: translateY(20px);
+        z-index: 2;
+      }
+
+      .card:hover .sender-name {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      .balloon {
+        position: fixed;
+        animation: float 6s ease-in-out infinite;
+        z-index: 1;
+        font-size: 2rem;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(5deg);
+        }
+      }
+
+      @keyframes sparkle {
+        0% {
+          transform: scale(0) rotate(0deg);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1) rotate(180deg);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: radial-gradient(circle, #fff 20%, transparent 70%);
+        pointer-events: none;
+      }
+
+      .party-popper {
+        position: absolute;
+        pointer-events: none;
+        animation: popperBurst 0.5s ease-out forwards;
+        font-size: 2rem;
+        z-index: 1000;
+      }
+
+      @keyframes popperBurst {
+        0% {
+          transform: scale(0.5) rotate(0deg);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(2) rotate(180deg);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(3) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 3rem;
+        }
+
+        .card {
+          width: 280px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .header h1 {
+          font-size: 2.5rem;
+        }
+
+        .card {
+          width: 240px;
+        }
+      }
+
+      /* Games styles */
+      .games-button {
+        margin: 2rem 0 4rem 0;
+        padding: 1.3rem 2.5rem; /* slightly bigger padding */
+        font-size: 1.7rem; /* slightly bigger font */
+        background: linear-gradient(45deg, #ff69b4, #9370db);
+        border: 3px solid white; /* added white border */
+        border-radius: 25px;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s, box-shadow 0.3s;
+        font-family: "Poppins", sans-serif;
+        z-index: 2;
+      }
+
+      .games-button:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .games-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .games-menu {
+        background: white;
+        padding: 2rem;
+        border-radius: 20px;
+        text-align: center;
+      }
+
+      .game-option {
+        display: block;
+        margin: 1rem 0;
+        padding: 1rem 2rem;
+        background: linear-gradient(45deg, #ff69b4, #9370db);
+        color: white;
+        text-decoration: none;
+        border-radius: 15px;
+        transition: transform 0.3s;
+      }
+
+      .game-option:hover {
+        transform: scale(1.05);
+      }
+
+      .close-games {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 2rem;
+        color: white;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Happy Birthday Sidra! 🎂</h1>
+    </div>
+
+    <div class="cards-container" id="cardsContainer">
+      <!-- Cards will be added here via JavaScript -->
+    </div>
+
+    <button class="games-button" onclick="showGames()">
+      🎮 Play Birthday Games! 🎮
+    </button>
+
+    <div class="games-container" id="gamesContainer">
+      <div class="close-games" onclick="hideGames()">×</div>
+      <div class="games-menu">
+        <h2>Choose a Game to Play!</h2>
+        <a href="memory-game.html" class="game-option"
+          >🎴 Birthday Memory Match</a
+        >
+        <a href="balloon-pop.html" class="game-option">🎈 Pop the Balloons</a>
+        <a href="catch-cake.html" class="game-option">🎂 Catch the Cake</a>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+    <script>
+      // Birthday wishes data
+      const wishes = [
+        {
+          message:
+            "Happiest Birthday Sidra✨ Wishing you happy and healthy life ahead and a fantastic day filled with happiness and relaxation. Your guidance and support means a lot to us, and we are grateful for all you do. Here is to another year of success, health, and happiness. Have a wonderful day✨",
+          sender: "Fatima",
+        },
+        {
+          message:
+            "Happiest birthday to the person who's been tolerating me since childhood! Just kidding, thanks for being amazing! 🎉",
+          sender: "Aroosa",
+        },
+        {
+          message:
+            "Happy birthday muhtarma. Many many happy returns of the day. May Allah bless you with the best. Stay blessed always ❤",
+          sender: "Sufyan",
+        },
+        {
+          message:
+            "🥰Happy Birthday Sidra  and thank you for being greate🥰🥰🎁🎂🎈🎈🎈🥳🥳🥳🎉🎉🎉🎉💐💐💐🎈🎈🎈",
+          sender: "Gul",
+        },
+        {
+          message:
+            "Happy Birthday Sidra! Wishing you a day filled with joy and laughter! 🥳🎉",
+          sender: "Hassaan",
+        },
+        {
+          message: "Waiting for the Message.......",
+          sender: "Alexander",
+        },
+        {
+          message: "Waiting for the Message.......",
+          sender: "Tanveer",
+        },
+      ];
+
+      function shootConfetti(originX = null, originY = null, isHover = false) {
+        const count = isHover ? 100 : 400;
+        const defaults = {
+          origin: {
+            x: originX || 0.5,
+            y: originY || 0.7,
+          },
+          spread: isHover ? 50 : 90,
+          ticks: isHover ? 60 : 200,
+          gravity: isHover ? 1.2 : 1.2,
+          decay: isHover ? 0.95 : 0.94,
+          startVelocity: isHover ? 15 : 30,
+          shapes: ["star", "circle"],
+          colors: ["#FFD700", "#FF69B4", "#9370DB", "#87CEEB", "#FFA500"],
+          scalar: isHover ? 0.5 : 1,
+        };
+
+        if (isHover) {
+          confetti({
+            ...defaults,
+            particleCount: count,
+            spread: 45,
+            startVelocity: 15,
+            decay: 0.95,
+            scalar: 0.5,
+          });
+        } else {
+          const fireConfig = [
+            { ratio: 0.25, spread: 26, startVelocity: 55 },
+            { ratio: 0.2, spread: 60 },
+            { ratio: 0.35, spread: 100, decay: 0.91, scalar: 0.8 },
+            {
+              ratio: 0.1,
+              spread: 120,
+              startVelocity: 25,
+              decay: 0.92,
+              scalar: 1.2,
+            },
+            { ratio: 0.1, spread: 120, startVelocity: 45 },
+          ];
+
+          fireConfig.forEach((config) => {
+            confetti({
+              ...defaults,
+              particleCount: Math.floor(count * config.ratio),
+              ...config,
+            });
+          });
+        }
+      }
+
+      function createBalloons() {
+        const positions = [
+          { top: "10%", left: "5%" },
+          { top: "20%", right: "5%" },
+          { top: "40%", left: "8%" },
+          { top: "60%", right: "8%" },
+          { top: "80%", left: "5%" },
+          { top: "90%", right: "5%" },
+          { top: "30%", left: "15%" },
+          { top: "70%", right: "15%" },
+          { top: "15%", right: "20%" },
+          { top: "85%", left: "20%" },
+          { top: "45%", left: "25%" },
+          { top: "55%", right: "25%" },
+          { top: "25%", left: "30%" },
+          { top: "75%", right: "30%" },
+          { top: "35%", right: "35%" },
+        ];
+
+        positions.forEach((pos, index) => {
+          const balloon = document.createElement("div");
+          balloon.className = "balloon";
+          balloon.innerHTML = "🎈";
+          balloon.style.fontSize = `${Math.random() * 30 + 20}px`;
+          Object.keys(pos).forEach((key) => (balloon.style[key] = pos[key]));
+          balloon.style.animationDelay = `${Math.random() * 3}s`;
+          document.body.appendChild(balloon);
+        });
+      }
+
+      function createSparkle(card, x, y) {
+        const sparkle = document.createElement("div");
+        sparkle.className = "sparkle";
+        sparkle.style.left = x + "px";
+        sparkle.style.top = y + "px";
+        sparkle.style.animation = "sparkle 1s forwards";
+        card.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 1000);
+      }
+
+      function createPartyPopper(x, y) {
+        const popper = document.createElement("div");
+        popper.className = "party-popper";
+        popper.innerHTML = "🎉";
+        popper.style.left = `${x}px`;
+        popper.style.top = `${y}px`;
+        document.body.appendChild(popper);
+
+        // Increased number of poppers and spread range
+        for (let i = 0; i < 8; i++) {
+          // Increased from 5 to 8 poppers
+          const delayedPopper = document.createElement("div");
+          delayedPopper.className = "party-popper";
+          delayedPopper.innerHTML = ["🎉", "🎊", "✨", "🎈"][
+            Math.floor(Math.random() * 4)
+          ];
+          // Increased spread range from 50 to 150
+          delayedPopper.style.left = `${x + (Math.random() - 0.5) * 150}px`;
+          delayedPopper.style.top = `${y + (Math.random() - 0.5) * 150}px`;
+          delayedPopper.style.animationDelay = `${i * 0.1}s`;
+          document.body.appendChild(delayedPopper);
+
+          setTimeout(() => {
+            delayedPopper.remove();
+          }, 1000);
+        }
+
+        setTimeout(() => {
+          popper.remove();
+        }, 1000);
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        createBalloons();
+        shootConfetti();
+        setInterval(() => shootConfetti(), 10000);
+
+        const cardsContainer = document.getElementById("cardsContainer");
+        wishes.forEach((wish) => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <div class="card-content">${wish.message}</div>
+            <div class="sender-name">✨ ${wish.sender} ✨</div>
+        `;
+
+          card.addEventListener("mouseenter", () => {
+            const rect = card.getBoundingClientRect();
+            const x = (rect.left + rect.right) / 2 / window.innerWidth;
+            const y = (rect.top + rect.bottom) / 2 / window.innerHeight;
+            shootConfetti(x, y, true);
+          });
+
+          card.addEventListener("mousemove", (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            createSparkle(card, x, y);
+          });
+
+          card.addEventListener("click", (e) => {
+            const rect = card.getBoundingClientRect();
+            createPartyPopper(e.clientX, e.clientY);
+
+            card.style.transform = "scale(0.95)";
+            setTimeout(() => {
+              card.style.transform = "";
+            }, 150);
+
+            shootConfetti(
+              (e.clientX - window.scrollX) / window.innerWidth,
+              (e.clientY - window.scrollY) / window.innerHeight,
+              true
+            );
+          });
+
+          cardsContainer.appendChild(card);
+        });
+      });
+
+      function showGames() {
+        document.getElementById("gamesContainer").style.display = "flex";
+      }
+
+      function hideGames() {
+        document.getElementById("gamesContainer").style.display = "none";
+      }
+    </script>
+  </body>
+</html>

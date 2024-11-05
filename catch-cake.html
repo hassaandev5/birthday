@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catch the Cake!</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #ff69b4, #9370db);
+        font-family: "Poppins", sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      .game-container {
+        width: 100%;
+        height: 85vh;
+        position: relative;
+        margin-top: 2rem;
+        cursor: none;
+      }
+
+      .player {
+        position: absolute;
+        bottom: 20px;
+        font-size: 4rem;
+        transform: translateX(-50%);
+        user-select: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 2;
+      }
+
+      .plate {
+        font-size: 5rem;
+      }
+
+      .falling-item {
+        position: absolute;
+        font-size: 3rem;
+        animation: fall linear;
+      }
+
+      @keyframes fall {
+        from {
+          top: -50px;
+        }
+        to {
+          top: calc(85vh + 50px);
+        }
+      }
+
+      .score-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 1rem 2rem;
+        border-radius: 25px;
+        color: white;
+        font-size: 1.5rem;
+        backdrop-filter: blur(5px);
+        display: flex;
+        gap: 2rem;
+        z-index: 100;
+      }
+
+      .lives-container {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.2);
+        padding: 1rem 2rem;
+        border-radius: 25px;
+        color: white;
+        font-size: 1.5rem;
+        backdrop-filter: blur(5px);
+        z-index: 100;
+      }
+
+      .back-button {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        padding: 1rem 2rem;
+        background: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        z-index: 100;
+      }
+
+      .back-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .game-over {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 2rem 4rem;
+        border-radius: 25px;
+        text-align: center;
+        display: none;
+        z-index: 1000;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .play-again {
+        margin-top: 1rem;
+        padding: 1rem 2rem;
+        background: linear-gradient(45deg, #ff69b4, #9370db);
+        border: none;
+        border-radius: 25px;
+        color: white;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: transform 0.3s;
+      }
+
+      .play-again:hover {
+        transform: scale(1.05);
+      }
+
+      .catch-effect {
+        position: absolute;
+        pointer-events: none;
+        animation: catch-sparkle 0.5s forwards;
+        font-size: 2rem;
+      }
+
+      @keyframes catch-sparkle {
+        0% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -100%) scale(2);
+          opacity: 0;
+        }
+      }
+
+      .level-indicator {
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1.5rem;
+        border-radius: 25px;
+        color: white;
+        font-size: 1.2rem;
+        backdrop-filter: blur(5px);
+        z-index: 100;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="back-button" onclick="window.location.href='birthday.html'">
+      ← Back to Birthday Page
+    </button>
+    <div class="score-container">
+      <div>Score: <span id="score">0</span></div>
+      <div>High Score: <span id="highScore">0</span></div>
+    </div>
+    <div class="lives-container">Lives: <span id="lives">❤️❤️❤️</span></div>
+    <div class="level-indicator">Level: <span id="level">1</span></div>
+    <div class="game-container" id="gameContainer">
+      <div class="player" id="player">
+        <div class="plate">🍽️</div>
+      </div>
+    </div>
+    <div class="game-over" id="gameOver">
+      <h2>Game Over!</h2>
+      <p>Final Score: <span id="finalScore">0</span></p>
+      <p>High Score: <span id="finalHighScore">0</span></p>
+      <button class="play-again" onclick="startGame()">Play Again</button>
+    </div>
+
+    <script>
+      let score = 0;
+      let lives = 3;
+      let level = 1;
+      let gameActive = false;
+      let highScore = localStorage.getItem("cakeHighScore") || 0;
+      let dropInterval;
+      let speedMultiplier = 1;
+
+      const player = document.getElementById("player");
+      const gameContainer = document.getElementById("gameContainer");
+      const items = ["🎂", "🧁", "🍰", "💣"];
+
+      function updateScore(points) {
+        score += points;
+        document.getElementById("score").textContent = score;
+        if (score > highScore) {
+          highScore = score;
+          localStorage.setItem("cakeHighScore", highScore);
+          document.getElementById("highScore").textContent = highScore;
+        }
+
+        // Level up every 100 points
+        const newLevel = Math.floor(score / 100) + 1;
+        if (newLevel !== level) {
+          level = newLevel;
+          document.getElementById("level").textContent = level;
+          speedMultiplier = 1 + (level - 1) * 0.2; // Increase speed by 20% per level
+        }
+      }
+
+      function updateLives(change) {
+        lives += change;
+        document.getElementById("lives").textContent = "❤️".repeat(lives);
+        if (lives <= 0) {
+          endGame();
+        }
+      }
+
+      function createCatchEffect(x, y) {
+        const effect = document.createElement("div");
+        effect.className = "catch-effect";
+        effect.innerHTML = "✨";
+        effect.style.left = x + "px";
+        effect.style.top = y + "px";
+        gameContainer.appendChild(effect);
+        setTimeout(() => effect.remove(), 500);
+      }
+
+      function createFallingItem() {
+        if (!gameActive) return;
+
+        const item = document.createElement("div");
+        item.className = "falling-item";
+        const randomItem = items[Math.floor(Math.random() * items.length)];
+        item.innerHTML = randomItem;
+
+        const containerWidth = gameContainer.offsetWidth;
+        const randomX = Math.random() * (containerWidth - 50);
+        item.style.left = randomX + "px";
+
+        const fallDuration = 6000 / speedMultiplier; // Adjust speed based on level
+        item.style.animation = `fall ${fallDuration}ms linear`;
+
+        gameContainer.appendChild(item);
+
+        const checkCollision = setInterval(() => {
+          if (!gameActive) {
+            clearInterval(checkCollision);
+            return;
+          }
+
+          const itemRect = item.getBoundingClientRect();
+          const playerRect = player.getBoundingClientRect();
+
+          if (
+            itemRect.bottom >= playerRect.top &&
+            itemRect.top <= playerRect.bottom &&
+            itemRect.right >= playerRect.left &&
+            itemRect.left <= playerRect.right
+          ) {
+            if (randomItem === "💣") {
+              updateLives(-1);
+            } else {
+              updateScore(10);
+              createCatchEffect(
+                itemRect.left + itemRect.width / 2,
+                itemRect.top
+              );
+            }
+            item.remove();
+            clearInterval(checkCollision);
+          } else if (itemRect.top > window.innerHeight) {
+            if (randomItem !== "💣") {
+              updateLives(-1);
+            }
+            item.remove();
+            clearInterval(checkCollision);
+          }
+        }, 100);
+
+        setTimeout(() => {
+          if (item.parentNode) {
+            item.remove();
+          }
+          clearInterval(checkCollision);
+        }, fallDuration);
+      }
+
+      function startGame() {
+        score = 0;
+        lives = 3;
+        level = 1;
+        speedMultiplier = 1;
+        gameActive = true;
+
+        document.getElementById("score").textContent = "0";
+        document.getElementById("highScore").textContent = highScore;
+        document.getElementById("lives").textContent = "❤️❤️❤️";
+        document.getElementById("level").textContent = "1";
+        document.getElementById("gameOver").style.display = "none";
+
+        clearInterval(dropInterval);
+        dropInterval = setInterval(createFallingItem, 1000);
+      }
+
+      function endGame() {
+        gameActive = false;
+        clearInterval(dropInterval);
+        document.getElementById("finalScore").textContent = score;
+        document.getElementById("finalHighScore").textContent = highScore;
+        document.getElementById("gameOver").style.display = "block";
+      }
+
+      // Mouse movement handler
+      document.addEventListener("mousemove", (e) => {
+        if (gameActive) {
+          const containerRect = gameContainer.getBoundingClientRect();
+          const x = e.clientX - containerRect.left;
+          player.style.left = `${x}px`;
+        }
+      });
+
+      // Touch movement handler for mobile
+      document.addEventListener(
+        "touchmove",
+        (e) => {
+          if (gameActive) {
+            e.preventDefault();
+            const containerRect = gameContainer.getBoundingClientRect();
+            const x = e.touches[0].clientX - containerRect.left;
+            player.style.left = `${x}px`;
+          }
+        },
+        { passive: false }
+      );
+
+      // Start game when page loads
+      startGame();
+
+      // Handle window resize
+      window.addEventListener("resize", () => {
+        const items = document.querySelectorAll(".falling-item");
+        items.forEach((item) => item.remove());
+      });
+    </script>
+  </body>
+</html>
