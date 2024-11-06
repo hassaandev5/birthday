@@ -54,13 +54,15 @@
         border-radius: 15px;
         padding: 1.5rem;
         width: 300px;
-        min-height: 200px;
+        height: 250px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         position: relative;
         overflow: hidden;
         transition: transform 0.3s, box-shadow 0.3s;
         cursor: pointer;
         backdrop-filter: blur(5px);
+        display: flex;
+        flex-direction: column;
       }
 
       .card:hover {
@@ -74,6 +76,26 @@
         color: #333;
         z-index: 1;
         position: relative;
+        overflow-y: auto;
+        flex-grow: 1;
+        padding-bottom: 2rem; /* Space for sender name */
+        /* Style the scrollbar */
+        scrollbar-width: thin;
+        scrollbar-color: #9370db transparent;
+      }
+
+      /* For Webkit browsers (Chrome, Safari) */
+      .card-content::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .card-content::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .card-content::-webkit-scrollbar-thumb {
+        background-color: #9370db;
+        border-radius: 3px;
       }
 
       .sender-name {
@@ -287,7 +309,8 @@
       // Birthday wishes data
       const wishes = [
         {
-          message: "Waiting for the Message.......",
+          message:
+            "Words fail to capture how special I hope you feel today, Sidra. Over the past year at TaskSoft, our journey together has grown far beyond just colleagues - we've become true friends. Your unique blend of social intelligence, kindness, work ethic, and warmth continues to fascinate me, and our conversations are always enlightening.\n\nThrough your perspective on life and our amazing talks, you've helped me grow as a person in ways I never expected. You mean the world to me, and I'm grateful for your presence in my life. I hope your day is filled with all the warmth and positivity you bring to others.",
           sender: "Alexander",
         },
 
@@ -416,24 +439,35 @@
       }
 
       function createPartyPopper(x, y) {
+        // Add scroll position to get the absolute position
+        const scrollX =
+          window.pageXOffset || document.documentElement.scrollLeft;
+        const scrollY =
+          window.pageYOffset || document.documentElement.scrollTop;
+
+        const absoluteX = x + scrollX;
+        const absoluteY = y + scrollY;
+
         const popper = document.createElement("div");
         popper.className = "party-popper";
         popper.innerHTML = "🎉";
-        popper.style.left = `${x}px`;
-        popper.style.top = `${y}px`;
+        popper.style.left = `${absoluteX}px`;
+        popper.style.top = `${absoluteY}px`;
         document.body.appendChild(popper);
 
-        // Increased number of poppers and spread range
+        // Use absolute coordinates for delayed poppers too
         for (let i = 0; i < 8; i++) {
-          // Increased from 5 to 8 poppers
           const delayedPopper = document.createElement("div");
           delayedPopper.className = "party-popper";
           delayedPopper.innerHTML = ["🎉", "🎊", "✨", "🎈"][
             Math.floor(Math.random() * 4)
           ];
-          // Increased spread range from 50 to 150
-          delayedPopper.style.left = `${x + (Math.random() - 0.5) * 150}px`;
-          delayedPopper.style.top = `${y + (Math.random() - 0.5) * 150}px`;
+          delayedPopper.style.left = `${
+            absoluteX + (Math.random() - 0.5) * 150
+          }px`;
+          delayedPopper.style.top = `${
+            absoluteY + (Math.random() - 0.5) * 150
+          }px`;
           delayedPopper.style.animationDelay = `${i * 0.1}s`;
           document.body.appendChild(delayedPopper);
 
